@@ -15,7 +15,7 @@ type ButtonProps = {
 export const Button = ({
                            backgroundColor = AppStyles.colour.primary.background,
                            commend,
-                           height = 100,
+                           height = 50,
                            marginTop = 40,
                            width = 290,
                            text,

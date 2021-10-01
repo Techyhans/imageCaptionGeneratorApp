@@ -1,6 +1,8 @@
 import {View, Image, StyleSheet} from "react-native";
 import {Button} from "../components/Button";
-import React from "react";
+import * as ImagePicker from 'expo-image-picker';
+import React, {useState} from "react";
+import imageProxy from '../../assets/dummy.jpg';
 
 const styles = StyleSheet.create({
     container: {
@@ -12,18 +14,44 @@ const styles = StyleSheet.create({
     image: {
         width: '100%',
         height: '50%',
-        resizeMode: 'cover'
+        resizeMode: 'contain'
     }
 });
 
-export const Main = () => (
-    <View style={styles.container}>
-        <Image
-            style={styles.image}
-            source={require('../../assets/dummy.jpg')}
-        />
-        <Button commend={() => {}} text={''}/>
-        <Button commend={() => {}} text={'Upload Image'}/>
-        <Button commend={() => {}} text={'Generate Caption'}/>
-    </View>
-    );
+
+export const Main = () => {
+    const [image, setImage] = useState(imageProxy);
+
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.cancelled) {
+            setImage(result.uri);
+        }
+    };
+
+    return (
+        <View style={styles.container}>
+            <Image
+                style={styles.image}
+                source={image}
+            />
+            <Button
+                commend={() => {}}
+                text={'Take Picture'}/>
+            <Button
+                commend={() => pickImage()}
+                text={'Upload Image'}/>
+            <Button
+                commend={() => {}}
+                text={'Generate Caption'}/>
+        </View>
+    )
+};
