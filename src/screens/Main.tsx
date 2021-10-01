@@ -1,8 +1,11 @@
 import {View, Image, StyleSheet} from "react-native";
 import {Button} from "../components/Button";
 import * as ImagePicker from 'expo-image-picker';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import imageProxy from '../../assets/dummy.jpg';
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {useFocusEffect} from "@react-navigation/native";
+import {Camera as ExpoCamera} from "expo-camera";
 
 const styles = StyleSheet.create({
     container: {
@@ -19,8 +22,15 @@ const styles = StyleSheet.create({
 });
 
 
-export const Main = () => {
-    const [image, setImage] = useState(imageProxy);
+export const Main = ({route, navigation}: NativeStackScreenProps<RootStackParamList, "Main"> ) => {
+
+    const img = route.params?.img;
+    const [image, setImage] = useState( imageProxy);
+
+    useEffect(() => {
+        console.log("stuck here");
+        setImage(img? img : imageProxy);
+    }, [img]);
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -43,15 +53,17 @@ export const Main = () => {
                 style={styles.image}
                 source={image}
             />
-            <Button
-                commend={() => {}}
-                text={'Take Picture'}/>
-            <Button
-                commend={() => pickImage()}
-                text={'Upload Image'}/>
-            <Button
-                commend={() => {}}
-                text={'Generate Caption'}/>
+            <View style={styles.container}>
+                <Button
+                    commend={() => navigation.navigate("Camera")}
+                    text={'Take Picture'}/>
+                <Button
+                    commend={() => pickImage()}
+                    text={'Upload Image'}/>
+                <Button
+                    commend={() => navigation.navigate("Caption", {img: image})}
+                    text={'Generate Caption'}/>
+            </View>
         </View>
     )
 };
