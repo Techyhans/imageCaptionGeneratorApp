@@ -4,8 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import React, {useEffect, useState} from "react";
 import imageProxy from '../../assets/dummy.jpg';
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
-import {useFocusEffect} from "@react-navigation/native";
-import {Camera as ExpoCamera} from "expo-camera";
+import {RootStackParamList} from "../model/navigation";
 
 const styles = StyleSheet.create({
     container: {
@@ -13,30 +12,31 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+        flexDirection: 'column'
     },
     image: {
         width: '100%',
-        height: '50%',
+        height: '100%',
         resizeMode: 'contain'
     }
 });
 
 
-export const Main = ({route, navigation}: NativeStackScreenProps<RootStackParamList, "Main"> ) => {
+export const Main = ({route, navigation}: NativeStackScreenProps<RootStackParamList, "Main">) => {
 
     const img = route.params?.img;
     const [image, setImage] = useState(imageProxy);
 
     useEffect(() => {
         console.log(img);
-        setImage(img? img : imageProxy);
+        setImage(img ? img : imageProxy);
     }, [img]);
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
-            aspect: [4, 3],
+            aspect: [1, 1],
             quality: 1,
         });
 
@@ -49,11 +49,20 @@ export const Main = ({route, navigation}: NativeStackScreenProps<RootStackParamL
 
     return (
         <View style={styles.container}>
-            <Image
-                style={styles.image}
-                source={image}
+            <View style={{
+                ...styles.container,
+                flex: 1,
+                width: '100%',
+                height: '100%',
+                alignContent: 'center',
+                justifyContent: 'center'
+            }}>
+                <Image
+                    style={styles.image}
+                    source={image}
 
-            />
+                />
+            </View>
             <View style={styles.container}>
                 <Button
                     commend={() => navigation.navigate("Camera")}

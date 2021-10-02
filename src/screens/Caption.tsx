@@ -13,29 +13,37 @@ const styles = StyleSheet.create({
     },
     image: {
         width: '100%',
-        height: '50%',
-        resizeMode: 'contain'
+        height: '100%',
+        resizeMode: 'contain',
     },
-    textContainer: {},
-    text: {
-        flex: 1,
-        alignItems: 'flex-end'
-    }
 });
 
-export const Caption = ({route, navigation} : NativeStackScreenProps<RootStackParamList, "Caption">) => {
+export const Caption = ({route, navigation}: NativeStackScreenProps<RootStackParamList, "Caption">) => {
     const [caption, setCaption] = useState<string>('generating text....')
     const {img} = route.params;
 
 
     return (
         <View style={styles.container}>
-            <Image
-                style={styles.image}
-                source={img}/>
-            <Text style={styles.text}>
-                {caption}
-            </Text>
+            <View style={{
+                ...styles.container,
+                width: '100%',
+                height: '100%',
+                flex: 0.5
+            }}>
+                <Image
+                    style={styles.image}
+                    source={img}/>
+            </View>
+            <View style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                flex: 0.5,
+            }}>
+                <Text>
+                    {caption}
+                </Text>
+            </View>
         </View>
     )
 }

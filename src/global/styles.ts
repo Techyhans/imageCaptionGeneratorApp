@@ -4,5 +4,5 @@ export const AppStyles = {
             background: '#27ae8a',
             item: 'white'
         }
-    }
+    },
 }
