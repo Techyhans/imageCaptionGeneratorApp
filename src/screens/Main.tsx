@@ -25,10 +25,10 @@ const styles = StyleSheet.create({
 export const Main = ({route, navigation}: NativeStackScreenProps<RootStackParamList, "Main"> ) => {
 
     const img = route.params?.img;
-    const [image, setImage] = useState( imageProxy);
+    const [image, setImage] = useState(imageProxy);
 
     useEffect(() => {
-        console.log("stuck here");
+        console.log(img);
         setImage(img? img : imageProxy);
     }, [img]);
 
@@ -43,7 +43,7 @@ export const Main = ({route, navigation}: NativeStackScreenProps<RootStackParamL
         console.log(result);
 
         if (!result.cancelled) {
-            setImage(result.uri);
+            setImage(result);
         }
     };
 
@@ -52,6 +52,7 @@ export const Main = ({route, navigation}: NativeStackScreenProps<RootStackParamL
             <Image
                 style={styles.image}
                 source={image}
+
             />
             <View style={styles.container}>
                 <Button

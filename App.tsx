@@ -4,11 +4,18 @@ import {NavigationContainer} from '@react-navigation/native';
 import {Main} from "./src/screens/Main";
 import {Camera} from "./src/screens/Camera";
 import {Caption} from "./src/screens/Caption";
+import {CachedResource} from "./src/components/CachedResource";
 
 const Stack = createStackNavigator();
 
 export default function App() {
-  return (
+    const isLoadingComplete = CachedResource();
+
+    if (!isLoadingComplete) {
+        return null;
+    }
+
+    return (
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name='Main' component={Main}/>
@@ -16,5 +23,5 @@ export default function App() {
           <Stack.Screen name='Caption' component={Caption}/>
         </Stack.Navigator>
       </NavigationContainer>
-  );
+    );
 }

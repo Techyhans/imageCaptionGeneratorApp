@@ -1,9 +1,10 @@
-import {TouchableOpacity, View, Text, StyleSheet} from "react-native";
+import {TouchableOpacity, View, Text, StyleSheet, Alert} from "react-native";
 import React, {useEffect, useState} from "react";
-import { Camera as ExpoCamera } from 'expo-camera';
+import {Camera as ExpoCamera} from 'expo-camera';
 import {CameraType} from "expo-camera/build/Camera.types";
 import {Button} from "../components/Button";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../model/navigation";
 
 const styles = StyleSheet.create({
     container: {
@@ -19,27 +20,42 @@ const styles = StyleSheet.create({
     }
 });
 
-export const Camera = ({navigation} : NativeStackScreenProps<RootStackParamList>) => {
-    const [hasPermission, setHasPermission] = useState<boolean>(false);
+export const Camera = ({navigation}: NativeStackScreenProps<RootStackParamList>) => {
+    const [hasPermission, setHasPermission] = useState<boolean | null>(true);
     const [type, setType] = useState<CameraType>(ExpoCamera.Constants.Type.back);
     const [camera, setCamera] = useState<ExpoCamera | null>(null);
 
-    useEffect(() => {
+    const askPermission = () => {
         (async () => {
-            const { status } = await ExpoCamera.requestPermissionsAsync();
+            const {status} = await ExpoCamera.requestPermissionsAsync();
             setHasPermission(status === 'granted');
         })();
-    }, []);
+    }
+
+    useEffect(askPermission, []);
+
+    useEffect(() => {
+        console.log(hasPermission)
+        if (!hasPermission) {
+            Alert.alert(
+                "No Permission",
+                "Camera Permission is required!",
+                [
+                    {
+                        text: "ok",
+                        onPress: () => navigation.navigate("Main", {img: null}),
+                    }
+                ],
+                {cancelable: false}
+            )
+        }
+    }, [hasPermission])
 
     const onPress = () => {
         camera?.takePictureAsync().then((photo) => {
-            navigation.navigate("Main", {img: photo?.base64});
+            // console.log(photo);
+            navigation.navigate("Main", {img: photo});
         });
-    }
-
-    // todo: prompt error, then go back to main screen
-    if (hasPermission === null) {
-        return <View />;
     }
 
     return (
@@ -52,7 +68,7 @@ export const Camera = ({navigation} : NativeStackScreenProps<RootStackParamList>
                 ratio={'1:1'}
                 type={type}>
             </ExpoCamera>
-            {/*{add camera}*/}
+            {/*{add camera flip}*/}
             <Button
                 marginTop={90}
                 commend={onPress}

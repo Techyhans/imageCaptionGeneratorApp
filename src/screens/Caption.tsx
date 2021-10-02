@@ -1,6 +1,7 @@
 import {Image, StyleSheet, View, Text} from "react-native";
 import React, {useState} from "react";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../model/navigation";
 
 const styles = StyleSheet.create({
     container: {
