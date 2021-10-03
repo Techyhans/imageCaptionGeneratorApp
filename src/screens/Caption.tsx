@@ -3,6 +3,8 @@ import React, {useState} from "react";
 import {NativeStackScreenProps} from "@react-navigation/native-stack";
 import {RootStackParamList} from "../model/navigation";
 
+import { InferenceSession } from "onnxruntime-react-native";
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -21,7 +23,6 @@ const styles = StyleSheet.create({
 export const Caption = ({route, navigation}: NativeStackScreenProps<RootStackParamList, "Caption">) => {
     const [caption, setCaption] = useState<string>('generating text....')
     const {img} = route.params;
-
 
     return (
         <View style={styles.container}>
